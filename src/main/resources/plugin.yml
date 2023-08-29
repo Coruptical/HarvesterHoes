@@ -1,0 +1,14 @@
+name: HarvesterHoes
+version: '${project.version}'
+main: com.coruptical.harvesterhoes.HarvesterHoes
+api-version: '1.20'
+authors: [Coruptical]
+description: Harvester hoes plugin for servers.
+softdepend:
+  - TokenManager
+commands:
+  harvesterhoes:
+    description: Admin management for harvester hoes plugin.
+    aliases:
+      - harvhoes
+      - hh

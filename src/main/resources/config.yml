@@ -1,0 +1,31 @@
+# This config allows you to configure the things within the harvester hoe plugin.
+
+# **Some things have been hard-coded**, so if you have no contact with the author about a change, then unfortunate.
+# This plugin wasn't created to be sent around :P
+
+
+# What permission node should the /harvesterhoes be under?
+CommandPermission: 'harvesterhoes.admin'
+
+# What message should get returned if a player has no permission?
+PermissionMessage: '&cYou do not have permission to use this command.'
+
+# What should be the display name of the harvester hoe?
+HoeDisplayName: '&7[&bHarvester &5Hoe&7]'
+
+# --------------------------------------------------------------
+# ENCHANTMENT MODIFIERS BELOW.
+# **ALL "MAXLEVEL" VALUES MUST BE BETWEEN 1 AND 1500 OR THE PLUGIN WILL DISABLE.**
+# --------------------------------------------------------------
+
+# What should be the maximum level for token master?
+TokenMasterMaxLevel: 10
+
+# What should be the starting price (in tokens) to level up token master (0 to 1) ?
+TokenMasterStartingPrice: 5000
+
+# What should be the price multiplier per level for token master?
+TokenMasterPriceMultiplier: 0.2
+
+# What should be the token multiplier per level for token master?
+TokenMasterTokenMultiplier: 0.25
