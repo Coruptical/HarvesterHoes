@@ -62,10 +62,6 @@ public class Utils {
         p.getInventory().addItem(stack);
     }
 
-    public void sendHello(Player player){
-        player.sendMessage("Hello!");
-    }
-
     public List<String> getHoeLore(){
         List<String> lore = new ArrayList<>();
 
