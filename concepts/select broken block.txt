@@ -1,0 +1,8 @@
+instead of calculating per block just break as much cane per stack as possible (recursion method)
+
+select broken block
+use recursion to find top sugar cane block 
+work downwards until we find bottom (block that isn't cane)
+add amount of cane to int "caneBroken"
+set all cane from top to bottom to Material.AIR
+process tokens per cane broken (if has enchants)

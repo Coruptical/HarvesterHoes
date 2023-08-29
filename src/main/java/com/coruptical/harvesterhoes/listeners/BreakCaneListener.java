@@ -1,6 +1,7 @@
 package com.coruptical.harvesterhoes.listeners;
 
 import com.coruptical.harvesterhoes.HarvesterHoes;
+import com.coruptical.harvesterhoes.models.Enchant;
 import com.coruptical.harvesterhoes.models.Keys;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -38,6 +39,18 @@ public class BreakCaneListener implements Listener {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             if (!container.has(plugin.getHoe_key(), PersistentDataType.STRING)) return;
 
+
+            NamespacedKey tokenMasterKey = new NamespacedKey(plugin, Enchant.TOKENMASTER.hoeEnchant.getKeyName());
+            int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
+
+            double tokenMasterMultipler = 1;
+
+            if(levelTokenMaster > 0){
+                tokenMasterMultipler = 1 + (Enchant.TOKENMASTER.hoeEnchant.getLevelMultipler()*levelTokenMaster);
+            }
+
+
+
             e.setCancelled(true);
 
             // behaviour
@@ -58,11 +71,11 @@ public class BreakCaneListener implements Listener {
                     two_above.setType(Material.AIR);
                     one_above.setType(Material.AIR);
                     p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, 2);
+                    plugin.getTokenManager().addTokens(p, (long) (2*tokenMasterMultipler));
                 }else if(caneBroke == 1){
                     one_above.setType(Material.AIR);
                     p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, 1);
+                    plugin.getTokenManager().addTokens(p, (long) (1*tokenMasterMultipler));
                 }
 
             }else if(b.getRelative(0, -1, 0).getType().equals(Material.SUGAR_CANE)){
@@ -79,11 +92,11 @@ public class BreakCaneListener implements Listener {
                     one_above.setType(Material.AIR);
                     b.setType(Material.AIR);
                     p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, 2);
+                    plugin.getTokenManager().addTokens(p, (long) (2*tokenMasterMultipler));
                 }else if(caneBroke == 1){
                     b.setType(Material.AIR);
                     p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 1));
-                    plugin.getTokenManager().addTokens(p, 1);
+                    plugin.getTokenManager().addTokens(p, (long) (1*tokenMasterMultipler));
                 }
             }
         }
