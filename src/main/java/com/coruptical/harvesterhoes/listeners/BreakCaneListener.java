@@ -27,10 +27,36 @@ public class BreakCaneListener implements Listener {
     // TODO: Create quake enchantment (Need to discuss how behaviour works)
 
     public Block recurseToTop(Block b ){
-        Block topBlock = null;
+        Block blockAbove = b.getRelative(BlockFace.UP);
 
+        if (blockAbove.getType().equals(Material.SUGAR_CANE)){
+            return recurseToTop(blockAbove);
+        }else{
+            return b;
+        }
+    }
 
-        return topBlock;
+    public void processStack(Block b, Player p, PersistentDataContainer container){
+        Block blockBelow = b.getRelative(BlockFace.DOWN);
+        int caneBroke = 0;
+
+        NamespacedKey tokenMasterKey = new NamespacedKey(plugin, Enchant.TOKENMASTER.hoeEnchant.getKeyName());
+        int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
+
+        double tokenMasterMultipler = 1;
+
+        if(levelTokenMaster > 0){
+            tokenMasterMultipler = 1 + (Enchant.TOKENMASTER.hoeEnchant.getLevelMultipler()*levelTokenMaster);
+        }
+
+        b.setType(Material.AIR);
+        while (blockBelow.getType().equals(Material.SUGAR_CANE)){
+            caneBroke++;
+            blockBelow.setType(Material.AIR);
+            blockBelow = blockBelow.getRelative(BlockFace.DOWN);
+        }
+
+        plugin.getTokenManager().addTokens(p, (long) (caneBroke*tokenMasterMultipler));
     }
 
 
@@ -38,8 +64,8 @@ public class BreakCaneListener implements Listener {
     public void onBreak(BlockBreakEvent e){
 
 
-        Block b = e.getBlock();
-        if (!b.getType().equals(Material.SUGAR_CANE)) return;
+        Block brokenBlock = e.getBlock();
+        if (!brokenBlock.getType().equals(Material.SUGAR_CANE)) return;
 
         Player p = e.getPlayer();
         if(p.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE)){
@@ -52,65 +78,11 @@ public class BreakCaneListener implements Listener {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             if (!container.has(plugin.getHoe_key(), PersistentDataType.STRING)) return;
 
-
-            NamespacedKey tokenMasterKey = new NamespacedKey(plugin, Enchant.TOKENMASTER.hoeEnchant.getKeyName());
-            int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
-
-            double tokenMasterMultipler = 1;
-
-            if(levelTokenMaster > 0){
-                tokenMasterMultipler = 1 + (Enchant.TOKENMASTER.hoeEnchant.getLevelMultipler()*levelTokenMaster);
-            }
-
-
-
             e.setCancelled(true);
 
             // behaviour
-            int caneBroke = 0;
-
-            Block one_above = b.getRelative(0, 1, 0);
-
-            if (!b.getRelative(0, -1, 0).getType().equals(Material.SUGAR_CANE)){
-                Block two_above = b.getRelative(0, 2, 0);
-                if (two_above.getType().equals(Material.SUGAR_CANE)){
-                    caneBroke = 2;
-                }else if(one_above.getType().equals(Material.SUGAR_CANE)){
-                    caneBroke = 1;
-                }
-
-                if (caneBroke == 2){
-                    two_above.setType(Material.AIR);
-                    one_above.setType(Material.AIR);
-                    p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, (long) (2*tokenMasterMultipler));
-                }else if(caneBroke == 1){
-                    one_above.setType(Material.AIR);
-                    p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, (long) (1*tokenMasterMultipler));
-                }
-
-            }else if(b.getRelative(0, -1, 0).getType().equals(Material.SUGAR_CANE)){
-                Block two_below = b.getRelative(0, -2, 0);
-                if (two_below.getType().equals(Material.SUGAR_CANE)){
-                    caneBroke = 1;
-                }else if(one_above.getType().equals(Material.SUGAR_CANE)){
-                    caneBroke = 2;
-                }else if(!one_above.getType().equals(Material.SUGAR_CANE)){
-                    caneBroke = 1;
-                }
-
-                if (caneBroke == 2){
-                    one_above.setType(Material.AIR);
-                    b.setType(Material.AIR);
-                    p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 2));
-                    plugin.getTokenManager().addTokens(p, (long) (2*tokenMasterMultipler));
-                }else if(caneBroke == 1){
-                    b.setType(Material.AIR);
-                    p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, 1));
-                    plugin.getTokenManager().addTokens(p, (long) (1*tokenMasterMultipler));
-                }
-            }
+            Block topBlock = recurseToTop(brokenBlock);
+            processStack(topBlock, p, container);
         }
     }
 }

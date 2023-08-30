@@ -1,7 +1,6 @@
 package com.coruptical.harvesterhoes;
 
 import co.aikar.commands.BukkitCommandManager;
-import com.coruptical.harvesterhoes.commands.GUICommand;
 import com.coruptical.harvesterhoes.commands.HoeCommand;
 import com.coruptical.harvesterhoes.gui.GUIListener;
 import com.coruptical.harvesterhoes.gui.GUIManager;

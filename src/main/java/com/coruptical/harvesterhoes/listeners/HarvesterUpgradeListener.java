@@ -3,7 +3,6 @@ package com.coruptical.harvesterhoes.listeners;
 import com.coruptical.harvesterhoes.HarvesterHoes;
 import com.coruptical.harvesterhoes.gui.GUIManager;
 import com.coruptical.harvesterhoes.gui.impl.HoeInventory;
-import com.coruptical.harvesterhoes.gui.impl.PianoInventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
