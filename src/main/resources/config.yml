@@ -18,6 +18,9 @@ HoeDisplayName: '&7[&bHarvester &5Hoe&7]'
 # **ALL "MAXLEVEL" VALUES MUST BE BETWEEN 1 AND 1500 OR THE PLUGIN WILL DISABLE.**
 # --------------------------------------------------------------
 
+# ------------
+# TOKEN MASTER
+# ------------
 # What should be the maximum level for token master?
 TokenMasterMaxLevel: 10
 
@@ -29,3 +32,18 @@ TokenMasterPriceMultiplier: 0.2
 
 # What should be the token multiplier per level for token master?
 TokenMasterTokenMultiplier: 0.25
+
+# ---------------
+# SPAWNER FINDER
+# ---------------
+# What should be the maximum level for spawner finder?
+SpawnerFinderMaxLevel: 10
+
+# What should be the starting price (in tokens) to level up spawner finder (0 to 1) ?
+SpawnerFinderStartingPrice: 5000
+
+# What should be the price multipler per level for spawner finder?
+SpawnerFinderPriceMultiplier: 0.3
+
+# How much should we increase the % of finding a spawner per cane per level?
+SpawnerFinderChanceMultipler: 0.25

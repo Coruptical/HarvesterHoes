@@ -12,6 +12,15 @@ public enum Enchant {
             0,
             0,
             0)),
+    SPAWNERFINDER(new HoeEnchant(
+            Utils.cmsg("&5Spawner Finder"),
+            Utils.cmsg("&7Increases the chance of finding spawners by breaking sugar cane."),
+            0,
+            Material.SPAWNER,
+            0,
+            0,
+            0
+    ))
     ;
 
     public final HoeEnchant hoeEnchant;

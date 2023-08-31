@@ -25,11 +25,6 @@ import java.util.List;
 public class BreakCaneListener implements Listener {
     private final HarvesterHoes plugin = HarvesterHoes.getInstance();
 
-    // TODO: Implement new recursive cane breaking system.
-    // TODO: Create key finder/spawner finder
-    // TODO: Create auto-sell enchantment (Sells every 64 cane)
-    // TODO: Create quake enchantment (Need to discuss how behaviour works)
-
     public Block recurseToTop(Block b){
         Block blockAbove = b.getRelative(BlockFace.UP);
 

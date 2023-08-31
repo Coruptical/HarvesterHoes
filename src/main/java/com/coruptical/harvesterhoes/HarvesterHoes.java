@@ -1,6 +1,5 @@
 package com.coruptical.harvesterhoes;
 
-import co.aikar.commands.BukkitCommandManager;
 import com.coruptical.harvesterhoes.commands.HoeCommand;
 import com.coruptical.harvesterhoes.gui.GUIListener;
 import com.coruptical.harvesterhoes.gui.GUIManager;
@@ -13,6 +12,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+
+// TODO: Create key finder
+// TODO: Create spawner finder
+// TODO: Create auto-sell enchantment (Sells every 64 cane)
+// TODO: Create quake enchantment (Need to discuss how behaviour works)
 
 public final class HarvesterHoes extends JavaPlugin {
     private static HarvesterHoes instance;
@@ -55,6 +59,11 @@ public final class HarvesterHoes extends JavaPlugin {
         int tokenMasterMaxLevel = getTokenMasterMaxLevel();
         if (tokenMasterMaxLevel < 1 || tokenMasterMaxLevel > 1500)
             getServer().getPluginManager().disablePlugin(this);
+
+        int spawnerFinderMaxLevel = getSpawnerFinderMaxLevel();
+        if (spawnerFinderMaxLevel < 1 || spawnerFinderMaxLevel > 1500){
+            getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     public void setupEnchants(){
@@ -66,7 +75,11 @@ public final class HarvesterHoes extends JavaPlugin {
         tokenMaster.hoeEnchant.setPriceMultiplier(getTokenMasterPriceMultiplier());
 
         // Spawner finder
-
+        Enchant spawnerFinder = Enchant.SPAWNERFINDER;
+        spawnerFinder.hoeEnchant.setMaxLevel(getSpawnerFinderMaxLevel());
+        spawnerFinder.hoeEnchant.setStartingPrice(getSpawnerFinderStartingPrice());
+        spawnerFinder.hoeEnchant.setLevelMultipler(getSpawnerFinderChanceMultipler());
+        spawnerFinder.hoeEnchant.setPriceMultiplier(getSpawnerFinderPriceMultipler());
 
         // Key finder
 
@@ -131,4 +144,19 @@ public final class HarvesterHoes extends JavaPlugin {
         return getConfig().getDouble("TokenMasterTokenMultiplier");
     }
 
+    public int getSpawnerFinderMaxLevel(){
+        return getConfig().getInt("SpawnerFinderMaxLevel");
+    }
+
+    public int getSpawnerFinderStartingPrice(){
+        return getConfig().getInt("SpawnerFinderStartingPrice");
+    }
+
+    public double getSpawnerFinderPriceMultipler(){
+        return getConfig().getDouble("SpawnerFinderPriceMultipler");
+    }
+
+    public double getSpawnerFinderChanceMultipler(){
+        return getConfig().getDouble("SpawnerFinderChanceMultipler");
+    }
 }
