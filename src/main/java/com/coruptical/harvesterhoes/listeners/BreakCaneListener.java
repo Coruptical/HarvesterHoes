@@ -18,6 +18,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BreakCaneListener implements Listener {
     private final HarvesterHoes plugin = HarvesterHoes.getInstance();
 
@@ -26,7 +30,7 @@ public class BreakCaneListener implements Listener {
     // TODO: Create auto-sell enchantment (Sells every 64 cane)
     // TODO: Create quake enchantment (Need to discuss how behaviour works)
 
-    public Block recurseToTop(Block b ){
+    public Block recurseToTop(Block b){
         Block blockAbove = b.getRelative(BlockFace.UP);
 
         if (blockAbove.getType().equals(Material.SUGAR_CANE)){
@@ -36,9 +40,16 @@ public class BreakCaneListener implements Listener {
         }
     }
 
-    public void processStack(Block b, Player p, PersistentDataContainer container){
-        Block blockBelow = b.getRelative(BlockFace.DOWN);
+    public void processStack(Block topBlock, Player p, PersistentDataContainer container){
+        Block selectedBlock = topBlock.getRelative(0, -1, 0);
         int caneBroke = 0;
+        ArrayDeque<Block> selectedBlocks = new ArrayDeque<>();
+
+        if (selectedBlock.getType().equals(Material.SUGAR_CANE)){
+            selectedBlocks.addFirst(topBlock);
+            caneBroke++;
+        }
+
 
         NamespacedKey tokenMasterKey = new NamespacedKey(plugin, Enchant.TOKENMASTER.hoeEnchant.getKeyName());
         int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
@@ -49,14 +60,23 @@ public class BreakCaneListener implements Listener {
             tokenMasterMultipler = 1 + (Enchant.TOKENMASTER.hoeEnchant.getLevelMultipler()*levelTokenMaster);
         }
 
-        b.setType(Material.AIR);
-        while (blockBelow.getType().equals(Material.SUGAR_CANE)){
+        while (selectedBlock.getType().equals(Material.SUGAR_CANE)){
+            if (!selectedBlock.getRelative(0, -1, 0).
+                    getType().equals(Material.SUGAR_CANE)) break;
+
             caneBroke++;
-            blockBelow.setType(Material.AIR);
-            blockBelow = blockBelow.getRelative(BlockFace.DOWN);
+            selectedBlocks.addFirst(selectedBlock);
+            selectedBlock = selectedBlock.getRelative(0, -1, 0);
         }
 
+        for (Block b : selectedBlocks){
+            b.setType(Material.AIR);
+        }
+
+        p.getInventory().addItem(new ItemStack(Material.SUGAR_CANE, caneBroke));
+
         plugin.getTokenManager().addTokens(p, (long) (caneBroke*tokenMasterMultipler));
+
     }
 
 
