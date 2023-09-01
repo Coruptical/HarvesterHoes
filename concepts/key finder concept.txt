@@ -9,3 +9,9 @@ solar
 command: /excellentcrates give <Player> <keyName>
 
 TODO: Set up a give system using the excellentcrates command.
+
+we can potentially use:
+Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "<Command, no / needed>");
+
+Although this may be considered as potentially malicious due to the fact,
+we may be executing any command using this method.

@@ -3,6 +3,7 @@ package com.coruptical.harvesterhoes.listeners;
 import com.coruptical.harvesterhoes.HarvesterHoes;
 import com.coruptical.harvesterhoes.models.Enchant;
 import com.coruptical.harvesterhoes.models.Keys;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -45,7 +46,6 @@ public class BreakCaneListener implements Listener {
             caneBroke++;
         }
 
-
         NamespacedKey tokenMasterKey = new NamespacedKey(plugin, Enchant.TOKENMASTER.hoeEnchant.getKeyName());
         int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
 
@@ -72,6 +72,15 @@ public class BreakCaneListener implements Listener {
 
         plugin.getTokenManager().addTokens(p, (long) (caneBroke*tokenMasterMultipler));
 
+
+        // Try implement key finder
+
+        // TODO: Do chance of rolling PER CANE, then individual chances for each key type (rarity-wise)
+        while(caneBroke > 0){
+            caneBroke--;
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
+                    "excellentcrates give " + p.getDisplayName() + " vote 1");
+        }
     }
 
 
