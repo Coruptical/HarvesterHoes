@@ -1,0 +1,11 @@
+keys:
+
+vote
+spawner
+mars
+lunar
+solar
+
+command: /excellentcrates give <Player> <keyName>
+
+TODO: Set up a give system using the excellentcrates command.
