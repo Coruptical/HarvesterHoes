@@ -13,6 +13,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 // TODO: Create key finder
 // TODO: Create spawner finder
 // TODO: Create auto-sell enchantment (Sells every 64 cane)
@@ -27,6 +29,8 @@ public final class HarvesterHoes extends JavaPlugin {
 
     private GUIManager guiManager;
 
+    private String[] keys;
+
     public static HarvesterHoes getInstance(){
         return instance;
     }
@@ -37,6 +41,10 @@ public final class HarvesterHoes extends JavaPlugin {
 
     public NamespacedKey getHoe_key() {
         return hoe_key;
+    }
+
+    public String[] getKeys() {
+        return keys;
     }
 
     @Override
@@ -64,6 +72,11 @@ public final class HarvesterHoes extends JavaPlugin {
         if (spawnerFinderMaxLevel < 1 || spawnerFinderMaxLevel > 1500){
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        int keyFinderMaxLevel = getKeyFinderMaxLevel();
+        if (keyFinderMaxLevel < 1 || keyFinderMaxLevel > 1500){
+            getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     public void setupEnchants(){
@@ -71,17 +84,30 @@ public final class HarvesterHoes extends JavaPlugin {
         Enchant tokenMaster = Enchant.TOKENMASTER;
         tokenMaster.hoeEnchant.setMaxLevel(getTokenMasterMaxLevel());
         tokenMaster.hoeEnchant.setStartingPrice(getTokenMasterStartingPrice());
-        tokenMaster.hoeEnchant.setLevelMultipler(getTokenMasterTokenMultiplier());
+        tokenMaster.hoeEnchant.setLevelMultiplier(getTokenMasterTokenMultiplier());
         tokenMaster.hoeEnchant.setPriceMultiplier(getTokenMasterPriceMultiplier());
 
         // Spawner finder
         Enchant spawnerFinder = Enchant.SPAWNERFINDER;
         spawnerFinder.hoeEnchant.setMaxLevel(getSpawnerFinderMaxLevel());
         spawnerFinder.hoeEnchant.setStartingPrice(getSpawnerFinderStartingPrice());
-        spawnerFinder.hoeEnchant.setLevelMultipler(getSpawnerFinderChanceMultipler());
-        spawnerFinder.hoeEnchant.setPriceMultiplier(getSpawnerFinderPriceMultipler());
+        spawnerFinder.hoeEnchant.setLevelMultiplier(getSpawnerFinderChanceMultiplier());
+        spawnerFinder.hoeEnchant.setPriceMultiplier(getSpawnerFinderPriceMultiplier());
 
         // Key finder
+        Enchant keyFinder = Enchant.KEYFINDER;
+        keyFinder.hoeEnchant.setMaxLevel(getKeyFinderMaxLevel());
+        keyFinder.hoeEnchant.setStartingPrice(getKeyFinderStartingPrice());
+        keyFinder.hoeEnchant.setLevelMultiplier(getKeyFinderChanceMultiplier());
+        keyFinder.hoeEnchant.setPriceMultiplier(getKeyFinderPriceMultiplier());
+
+        keys = getKeyStringList().toLowerCase().split(",");
+
+
+        // Auto sell
+
+
+        // Quake
 
     }
 
@@ -152,11 +178,30 @@ public final class HarvesterHoes extends JavaPlugin {
         return getConfig().getInt("SpawnerFinderStartingPrice");
     }
 
-    public double getSpawnerFinderPriceMultipler(){
-        return getConfig().getDouble("SpawnerFinderPriceMultipler");
+    public double getSpawnerFinderPriceMultiplier(){
+        return getConfig().getDouble("SpawnerFinderPriceMultiplier");
     }
 
-    public double getSpawnerFinderChanceMultipler(){
-        return getConfig().getDouble("SpawnerFinderChanceMultipler");
+    public double getSpawnerFinderChanceMultiplier(){
+        return getConfig().getDouble("SpawnerFinderChanceMultiplier");
+    }
+    public int getKeyFinderMaxLevel(){
+        return getConfig().getInt("KeyFinderMaxLevel");
+    }
+
+    public int getKeyFinderStartingPrice(){
+        return getConfig().getInt("KeyFinderStartingPrice");
+    }
+
+    public double getKeyFinderPriceMultiplier(){
+        return getConfig().getDouble("KeyFinderPriceMultiplier");
+    }
+
+    public double getKeyFinderChanceMultiplier(){
+        return getConfig().getDouble("KeyFinderChanceMultiplier");
+    }
+
+    public String getKeyStringList(){
+        return getConfig().getString("KeysList");
     }
 }

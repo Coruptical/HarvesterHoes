@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Utils {
 
@@ -30,6 +31,11 @@ public class Utils {
 
     public static String cmsg(String msg){
         return ChatColor.translateAlternateColorCodes('&', msg);
+    }
+
+    public static boolean getChance(int minimalChance) {
+        Random random = new Random();
+        return random.nextInt(99) + 1 >= minimalChance;
     }
 
     public void giveBasicHoe(Player p, int quantity){

@@ -14,9 +14,18 @@ public enum Enchant {
             0)),
     SPAWNERFINDER(new HoeEnchant(
             Utils.cmsg("&5Spawner Finder"),
-            Utils.cmsg("&7Increases the chance of finding spawners by breaking sugar cane."),
+            Utils.cmsg("&7Increases the chance of finding spawners when breaking sugar cane."),
             0,
             Material.SPAWNER,
+            0,
+            0,
+            0
+    )),
+    KEYFINDER(new HoeEnchant(
+            Utils.cmsg("&6Key Finder"),
+            Utils.cmsg("&7Increases the chance of rolling a key when breaking sugar cane."),
+            0,
+            Material.TRIPWIRE_HOOK,
             0,
             0,
             0

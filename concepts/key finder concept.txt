@@ -6,7 +6,7 @@ mars
 lunar
 solar
 
-command: /excellentcrates give <Player> <keyName>
+command: /excellentcrates key give <player> <key> 1
 
 TODO: Set up a give system using the excellentcrates command.
 

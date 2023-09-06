@@ -24,17 +24,17 @@ public class HoeEnchant {
 
     private double priceMultiplier;
 
-    private double levelMultipler;
+    private double levelMultiplier;
 
     public HoeEnchant(String name, String description, int maxLevel, Material guiMaterial, int startingPrice,
-                      double priceMultiplier, double levelMultipler){
+                      double priceMultiplier, double levelMultiplier){
         this.name = name;
         this.description = description;
         this.maxLevel = maxLevel;
         this.guiMaterial = guiMaterial;
         this.startingPrice = startingPrice;
         this.priceMultiplier = priceMultiplier;
-        this.levelMultipler = levelMultipler;
+        this.levelMultiplier = levelMultiplier;
     }
 
     public String getName() {
@@ -85,12 +85,12 @@ public class HoeEnchant {
         this.priceMultiplier = priceMultiplier;
     }
 
-    public double getLevelMultipler() {
-        return levelMultipler;
+    public double getLevelMultiplier() {
+        return levelMultiplier;
     }
 
-    public void setLevelMultipler(double levelMultipler) {
-        this.levelMultipler = levelMultipler;
+    public void setLevelMultiplier(double levelMultiplier) {
+        this.levelMultiplier = levelMultiplier;
     }
 
     // Custom methods
