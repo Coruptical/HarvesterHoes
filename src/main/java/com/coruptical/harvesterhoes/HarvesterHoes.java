@@ -1,6 +1,7 @@
 package com.coruptical.harvesterhoes;
 
 import com.coruptical.harvesterhoes.commands.HoeCommand;
+import com.coruptical.harvesterhoes.commands.ReloadCommand;
 import com.coruptical.harvesterhoes.gui.GUIListener;
 import com.coruptical.harvesterhoes.gui.GUIManager;
 import com.coruptical.harvesterhoes.listeners.BreakCaneListener;
@@ -12,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
 
 // TODO: Create key finder
 // TODO: Create spawner finder
@@ -122,6 +121,7 @@ public final class HarvesterHoes extends JavaPlugin {
     public void register(){
         // Commands
         getCommand("harvesterhoes").setExecutor(new HoeCommand());
+        getCommand("hoesreload").setExecutor(new ReloadCommand());
 
         // Tab completers
         getCommand("harvesterhoes").setTabCompleter(new HoeCommand());

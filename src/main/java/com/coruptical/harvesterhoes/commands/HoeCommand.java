@@ -1,5 +1,6 @@
 package com.coruptical.harvesterhoes.commands;
 
+import com.coruptical.harvesterhoes.HarvesterHoes;
 import com.coruptical.harvesterhoes.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Utility;
@@ -14,8 +15,13 @@ import java.util.List;
 
 public class HoeCommand implements CommandExecutor, TabCompleter {
     private final Utils ut = new Utils();
+    private final HarvesterHoes plugin = HarvesterHoes.getInstance();
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        if (!commandSender.hasPermission(plugin.getPermission())){
+            commandSender.sendMessage(plugin.getPermissionMessage());
+        }
+
         if (args.length == 0) {
             commandSender.sendMessage(ut.color("&7/harvesterhoes <give/giveall> <?player> <basic/maxlevel>"));
         }

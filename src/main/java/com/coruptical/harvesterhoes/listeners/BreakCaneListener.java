@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -103,16 +105,12 @@ public class BreakCaneListener implements Listener {
         double keyFinderChance = keyFinderChanceDecimal/100;
         double spawnerFinderChance = spawnerFinderChanceDecimal/100;
 
-        int numOfKeys = plugin.getKeys().length;
-        double keyChance = (double) (100 / numOfKeys) / 100;
-
-        int numOfSpawners = plugin.getSpawners().length;
-        double spawnerChance = (double) (100 / numOfSpawners) / 100;
-
         while(caneBroke > 0){
             caneBroke--;
 
             if (rollKey && random.nextDouble() < keyFinderChance) {
+                int numOfKeys = plugin.getKeys().length;
+                double keyChance = (double) (100 / numOfKeys) / 100;
                 for (int i = 0; i < numOfKeys; i++) {
                     if (random.nextDouble() < keyChance) {
                         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
@@ -124,9 +122,24 @@ public class BreakCaneListener implements Listener {
             }
 
             if (rollSpawner && random.nextDouble() < spawnerFinderChance){
+                int numOfSpawners = plugin.getSpawners().length;
+                double spawnerChance = (double) (100 / numOfSpawners) / 100;
                 for (int i = 0; i < numOfSpawners; i++){
                     if (random.nextDouble() < spawnerChance) {
-                        // TODO: Implement adding behaviour for spawner.
+                        ItemStack stack = new ItemStack(Material.SPAWNER);
+                        CreatureSpawner spawner = (CreatureSpawner) stack.getItemMeta();
+
+                        String spawnerName = plugin.getSpawners()[i];
+                        spawner.setSpawnedType(EntityType.valueOf(spawnerName));
+
+                        stack.setItemMeta((ItemMeta) spawner);
+
+                        p.getInventory().addItem(stack);
+                        p.sendMessage(Utils.cmsg(
+                                "&6You got &f" + spawnerName.replace(
+                                        "_"," ").toUpperCase()
+                                + " &6SPAWNER."
+                        ));
                     }
                 }
             }
