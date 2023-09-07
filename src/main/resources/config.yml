@@ -36,6 +36,14 @@ TokenMasterTokenMultiplier: 0.25
 # ---------------
 # SPAWNER FINDER
 # ---------------
+
+# --------------------------------------------
+# List all spawners, separating all spawner names with JUST commas, and having only lowercase letters.
+# E.g. pig,enderman,zombie
+# If this is left empty, the spawner finder enchant will be disabled.
+SpawnerList: ''
+
+
 # What should be the maximum level for spawner finder?
 SpawnerFinderMaxLevel: 10
 

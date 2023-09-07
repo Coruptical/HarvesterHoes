@@ -31,6 +31,8 @@ public final class HarvesterHoes extends JavaPlugin {
 
     private String[] keys;
 
+    private String[] spawners;
+
     public static HarvesterHoes getInstance(){
         return instance;
     }
@@ -45,6 +47,10 @@ public final class HarvesterHoes extends JavaPlugin {
 
     public String[] getKeys() {
         return keys;
+    }
+
+    public String[] getSpawners() {
+        return spawners;
     }
 
     @Override
@@ -93,6 +99,8 @@ public final class HarvesterHoes extends JavaPlugin {
         spawnerFinder.hoeEnchant.setStartingPrice(getSpawnerFinderStartingPrice());
         spawnerFinder.hoeEnchant.setLevelMultiplier(getSpawnerFinderChanceMultiplier());
         spawnerFinder.hoeEnchant.setPriceMultiplier(getSpawnerFinderPriceMultiplier());
+
+        spawners = getSpawnerStringList().toLowerCase().split(",");
 
         // Key finder
         Enchant keyFinder = Enchant.KEYFINDER;
@@ -203,5 +211,9 @@ public final class HarvesterHoes extends JavaPlugin {
 
     public String getKeyStringList(){
         return getConfig().getString("KeysList");
+    }
+
+    public String getSpawnerStringList(){
+        return getConfig().getString("SpawnerList");
     }
 }

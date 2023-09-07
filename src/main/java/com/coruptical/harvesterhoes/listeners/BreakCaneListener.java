@@ -55,6 +55,7 @@ public class BreakCaneListener implements Listener {
 
         double tokenMasterMultipler = 1;
         double keyFinderChanceDecimal = 0;
+        double spawnerFinderChanceDecimal = 0;
 
 
         if(levelTokenMaster > 0){
@@ -63,6 +64,10 @@ public class BreakCaneListener implements Listener {
 
         if (levelKeyFinder > 0){
             keyFinderChanceDecimal = Enchant.KEYFINDER.hoeEnchant.getLevelMultiplier()*levelKeyFinder;
+        }
+
+        if (levelSpawnerFinder > 0){
+            spawnerFinderChanceDecimal = Enchant.SPAWNERFINDER.hoeEnchant.getLevelMultiplier()*levelSpawnerFinder;
         }
 
         while (selectedBlock.getType().equals(Material.SUGAR_CANE)){
@@ -83,32 +88,50 @@ public class BreakCaneListener implements Listener {
         plugin.getTokenManager().addTokens(p, (long) (caneBroke*tokenMasterMultipler));
 
 
-        // Implement key finder
+        Random random = new Random();
 
-        // Chances work by rolling PER CANE, then equal chances for every key,
-        // where each key contains the same chance of getting rolled after first chance succeeds.
-        if (plugin.getKeys().length > 0){
-            double keyFinderChance = keyFinderChanceDecimal/100;
-            Random random = new Random();
-            while(caneBroke > 0){
-                caneBroke--;
+        // Implement key finder and spawner finder
 
-                if (random.nextDouble() < keyFinderChance){
-                    int numOfKeys = plugin.getKeys().length;
-                    double keyChance = (double) (100 / numOfKeys) / 100;
-                    for (int i = 0; i < numOfKeys; i++){
-                        if (random.nextDouble() < keyChance){
-                            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
-                                    "excellentcrates key give " + p.getName() + " "
-                            +plugin.getKeys()[i] + " 1");
-                            break;
-                        }
+        // Chances work by rolling PER CANE, then equal chances for every key/spawner,
+        // where each key/spawner contains the same chance of getting rolled after the
+        // cane roll chance succeeds.
+        boolean rollKey = false;
+        boolean rollSpawner = false;
+        if (plugin.getKeys().length > 0) rollKey = true;
+        if (plugin.getSpawners().length > 0) rollSpawner = true;
+
+        double keyFinderChance = keyFinderChanceDecimal/100;
+        double spawnerFinderChance = spawnerFinderChanceDecimal/100;
+
+        int numOfKeys = plugin.getKeys().length;
+        double keyChance = (double) (100 / numOfKeys) / 100;
+
+        int numOfSpawners = plugin.getSpawners().length;
+        double spawnerChance = (double) (100 / numOfSpawners) / 100;
+
+        while(caneBroke > 0){
+            caneBroke--;
+
+            if (rollKey && random.nextDouble() < keyFinderChance) {
+                for (int i = 0; i < numOfKeys; i++) {
+                    if (random.nextDouble() < keyChance) {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
+                                "excellentcrates key give " + p.getName() + " "
+                                        + plugin.getKeys()[i] + " 1");
+                        break;
                     }
                 }
             }
+
+            if (rollSpawner && random.nextDouble() < spawnerFinderChance){
+                for (int i = 0; i < numOfSpawners; i++){
+                    if (random.nextDouble() < spawnerChance) {
+                        // TODO: Implement adding behaviour for spawner.
+                    }
+                }
+            }
+
         }
-
-
     }
 
 
