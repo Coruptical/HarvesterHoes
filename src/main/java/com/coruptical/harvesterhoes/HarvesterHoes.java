@@ -14,8 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO: Create key finder
-// TODO: Create spawner finder
 // TODO: Create auto-sell enchantment (Sells every 64 cane)
 // TODO: Create quake enchantment (Need to discuss how behaviour works)
 
@@ -31,6 +29,10 @@ public final class HarvesterHoes extends JavaPlugin {
     private String[] keys;
 
     private String[] spawners;
+
+    private boolean rollKey;
+
+    private boolean rollSpawners;
 
     public static HarvesterHoes getInstance(){
         return instance;
@@ -50,6 +52,14 @@ public final class HarvesterHoes extends JavaPlugin {
 
     public String[] getSpawners() {
         return spawners;
+    }
+
+    public boolean isRollKey() {
+        return rollKey;
+    }
+
+    public boolean isRollSpawners() {
+        return rollSpawners;
     }
 
     @Override
@@ -84,6 +94,23 @@ public final class HarvesterHoes extends JavaPlugin {
         }
     }
 
+    public void setupRolls(){
+        if (!getSpawnerStringList().isEmpty()){
+            spawners = getSpawnerStringList().toLowerCase().split(",");
+            rollSpawners = true;
+        }else{
+            rollSpawners = false;
+        }
+
+        if (!getKeyStringList().isEmpty()){
+            keys = getKeyStringList().toLowerCase().split(",");
+            rollKey = true;
+        }else{
+            rollKey = false;
+        }
+
+    }
+
     public void setupEnchants(){
         // Token master
         Enchant tokenMaster = Enchant.TOKENMASTER;
@@ -99,8 +126,6 @@ public final class HarvesterHoes extends JavaPlugin {
         spawnerFinder.hoeEnchant.setLevelMultiplier(getSpawnerFinderChanceMultiplier());
         spawnerFinder.hoeEnchant.setPriceMultiplier(getSpawnerFinderPriceMultiplier());
 
-        spawners = getSpawnerStringList().toLowerCase().split(",");
-
         // Key finder
         Enchant keyFinder = Enchant.KEYFINDER;
         keyFinder.hoeEnchant.setMaxLevel(getKeyFinderMaxLevel());
@@ -108,14 +133,16 @@ public final class HarvesterHoes extends JavaPlugin {
         keyFinder.hoeEnchant.setLevelMultiplier(getKeyFinderChanceMultiplier());
         keyFinder.hoeEnchant.setPriceMultiplier(getKeyFinderPriceMultiplier());
 
-        keys = getKeyStringList().toLowerCase().split(",");
-
 
         // Auto sell
 
 
         // Quake
 
+
+
+
+        setupRolls();
     }
 
     public void register(){

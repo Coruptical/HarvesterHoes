@@ -39,7 +39,7 @@ TokenMasterTokenMultiplier: 0.25
 
 # --------------------------------------------
 # List all spawners, separating all spawner names with JUST commas, and having only lowercase letters.
-# E.g. pig,enderman,zombie
+# E.g. pig,enderman,zombie,iron_golem
 # If this is left empty, the spawner finder enchant will be disabled.
 SpawnerList: ''
 

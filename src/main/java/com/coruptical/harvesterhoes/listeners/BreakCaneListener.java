@@ -10,11 +10,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -97,10 +99,6 @@ public class BreakCaneListener implements Listener {
         // Chances work by rolling PER CANE, then equal chances for every key/spawner,
         // where each key/spawner contains the same chance of getting rolled after the
         // cane roll chance succeeds.
-        boolean rollKey = false;
-        boolean rollSpawner = false;
-        if (plugin.getKeys().length > 0) rollKey = true;
-        if (plugin.getSpawners().length > 0) rollSpawner = true;
 
         double keyFinderChance = keyFinderChanceDecimal/100;
         double spawnerFinderChance = spawnerFinderChanceDecimal/100;
@@ -108,7 +106,7 @@ public class BreakCaneListener implements Listener {
         while(caneBroke > 0){
             caneBroke--;
 
-            if (rollKey && random.nextDouble() < keyFinderChance) {
+            if (plugin.isRollKey() && random.nextDouble() < keyFinderChance) {
                 int numOfKeys = plugin.getKeys().length;
                 double keyChance = (double) (100 / numOfKeys) / 100;
                 for (int i = 0; i < numOfKeys; i++) {
@@ -121,18 +119,23 @@ public class BreakCaneListener implements Listener {
                 }
             }
 
-            if (rollSpawner && random.nextDouble() < spawnerFinderChance){
+            if (plugin.isRollSpawners() && random.nextDouble() < spawnerFinderChance){
                 int numOfSpawners = plugin.getSpawners().length;
                 double spawnerChance = (double) (100 / numOfSpawners) / 100;
                 for (int i = 0; i < numOfSpawners; i++){
                     if (random.nextDouble() < spawnerChance) {
                         ItemStack stack = new ItemStack(Material.SPAWNER);
-                        CreatureSpawner spawner = (CreatureSpawner) stack.getItemMeta();
+                        BlockStateMeta blockmeta = (BlockStateMeta) stack.getItemMeta();
 
-                        String spawnerName = plugin.getSpawners()[i];
-                        spawner.setSpawnedType(EntityType.valueOf(spawnerName));
+                        CreatureSpawner creatureSpawner = (CreatureSpawner) blockmeta.getBlockState();
 
-                        stack.setItemMeta((ItemMeta) spawner);
+                        String spawnerName = plugin.getSpawners()[i].toUpperCase();
+                        creatureSpawner.setSpawnedType(EntityType.valueOf(spawnerName));
+
+                        blockmeta.setBlockState(creatureSpawner);
+
+                        stack.setItemMeta(blockmeta);
+
 
                         p.getInventory().addItem(stack);
                         p.sendMessage(Utils.cmsg(
@@ -140,6 +143,7 @@ public class BreakCaneListener implements Listener {
                                         "_"," ").toUpperCase()
                                 + " &6SPAWNER."
                         ));
+                        break;
                     }
                 }
             }

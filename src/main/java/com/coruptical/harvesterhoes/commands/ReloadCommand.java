@@ -26,5 +26,7 @@ public class ReloadCommand implements CommandExecutor {
         plugin.reloadConfig();
         plugin.saveDefaultConfig();
         plugin.saveConfig();
+
+        plugin.setupRolls();
     }
 }

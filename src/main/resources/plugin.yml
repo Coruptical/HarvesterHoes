@@ -12,3 +12,7 @@ commands:
     aliases:
       - harvhoes
       - hh
+  hoesreload:
+    description: Reload config command for harvester hoes plugin.
+    aliases:
+      - hreload
