@@ -11,7 +11,10 @@ CommandPermission: 'harvesterhoes.admin'
 PermissionMessage: '&cYou do not have permission to use this command.'
 
 # What should be the display name of the harvester hoe?
-HoeDisplayName: '&7[&bHarvester &5Hoe&7]'
+HoeDisplayName: '&7[&bHarvester Hoe&7]'
+
+# What should be the prefix before a player is sent a message?
+PluginPrefix: '&7[&bHarvester Hoes&7]: '
 
 # --------------------------------------------------------------
 # ENCHANTMENT MODIFIERS BELOW.
@@ -53,7 +56,7 @@ SpawnerFinderStartingPrice: 5000
 # What should be the price multiplier per level for spawner finder?
 SpawnerFinderPriceMultiplier: 0.3
 
-# How much should we increase the % of finding a spawner per cane per level?
+# How much should we increase the % chance of rolling a spawner per cane per level?
 SpawnerFinderChanceMultiplier: 0.1
 
 # ---------------
@@ -79,3 +82,15 @@ KeyFinderPriceMultiplier: 0.3
 
 # How much should we increase the % chance of rolling for a key per level?
 KeyFinderChanceMultiplier: 0.1
+
+
+
+# ---------------
+# AUTO SELL
+# ---------------
+
+# What should be price to unlock auto-sell as an enchantment?
+AutoSellPrice: 50000
+
+# What should each sugar cane sell for?
+SugarCaneSellPrice: 50

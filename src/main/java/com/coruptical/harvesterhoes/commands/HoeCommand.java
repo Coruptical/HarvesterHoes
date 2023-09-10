@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HoeCommand implements CommandExecutor, TabCompleter {
     private final Utils ut = new Utils();
@@ -23,20 +24,24 @@ public class HoeCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            commandSender.sendMessage(ut.color("&7/harvesterhoes <give/giveall> <?player> <basic/maxlevel>"));
+            commandSender.sendMessage(ut.color("&7/harvesterhoes <give/giveall> <?player>"));
         }
 
         if (args.length > 0){
             if (args[0].equals("give")){
-                if (args.length < 3){
-                    commandSender.sendMessage(ut.color("&7/harvesterhoes <give> <player> <basic/maxlevel>"));
+                if (args.length < 2){
+                    commandSender.sendMessage(ut.color("&7/harvesterhoes <give> <player>"));
                 }else{
                     Player toGive = Bukkit.getPlayer(args[1]);
                     if (toGive == null){
-                        commandSender.sendMessage(ut.color("&cThis is not a valid player."));
+                        commandSender.sendMessage(ut.color(plugin.getPrefix()+"&cThis is not a valid player."));
                     }else{
                         ut.giveBasicHoe(toGive, 1);
                     }
+                }
+            } else if (args[0].equals("giveall")) {
+                for (Player p : plugin.getServer().getOnlinePlayers()){
+                    ut.giveBasicHoe(p, 1);
                 }
             }
         }
@@ -51,6 +56,21 @@ public class HoeCommand implements CommandExecutor, TabCompleter {
         if(args.length == 1 && args[0].isEmpty()){
             list.add("give");
             list.add("giveall");
+        }
+        if (args.length == 1 && !args[0].isEmpty()){
+            if ("give".startsWith(args[0])) list.add("give");
+            if ("giveall".startsWith(args[0])) list.add("giveall");
+        }
+        if (args.length == 2 && args[1].isEmpty()){
+            for (Player p : plugin.getServer().getOnlinePlayers()){
+                list.add(p.getName());
+            }
+        }
+        if (args.length == 2 && !args[1].isEmpty()){
+            for (Player p : plugin.getServer().getOnlinePlayers()){
+                if (p.getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                    list.add(p.getName());
+            }
         }
         return list;
     }

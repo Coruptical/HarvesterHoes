@@ -62,15 +62,13 @@ public class HoeInventory extends InventoryGUI {
                     .creator(player -> enchant.hoeEnchant.createGuiItem(currentLevel))
                     .consumer(event -> {
                         Player player = (Player) event.getWhoClicked();
-                        player.sendMessage(""+ nextLevelCost);
-                        player.sendMessage("You clicked " + enchant.hoeEnchant.getKeyName());
 
                         OptionalLong tokensOptionalLong = plugin.getTokenManager().getTokens(player);
                         long playerTokens = tokensOptionalLong.getAsLong();
 
                         if (currentLevel == enchant.hoeEnchant.getMaxLevel()){
                             player.sendMessage(Utils.cmsg(
-                                    "&7You already have the max level of this. &8("+
+                                    plugin.getPrefix()+"&7You already have the max level of this. &8("+
                                     enchant.hoeEnchant.getMaxLevel()+")"));
                             return;
                         }
@@ -78,7 +76,7 @@ public class HoeInventory extends InventoryGUI {
                         if (playerTokens >= nextLevelCost){
                             plugin.getTokenManager().setTokens(player, playerTokens-nextLevelCost);
                             container.set(enchantKey, PersistentDataType.INTEGER, currentLevel+1);
-                            player.sendMessage(Utils.cmsg("&aSuccessfully upgraded "+
+                            player.sendMessage(Utils.cmsg(plugin.getPrefix()+"&aSuccessfully upgraded "+
                                     enchant.hoeEnchant.getName()));
 
                             hoeMeta.setLore(Utils.getLoreFromHoe(plugin, container));
@@ -87,7 +85,7 @@ public class HoeInventory extends InventoryGUI {
 
                             decorate(player);
                         }else{
-                            player.sendMessage(Utils.cmsg("&7You do not have enough tokens for this."));
+                            player.sendMessage(Utils.cmsg(plugin.getPrefix()+"&7You do not have enough tokens for this."));
                         }
                     });
 

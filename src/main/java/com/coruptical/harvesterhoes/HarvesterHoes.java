@@ -9,9 +9,11 @@ import com.coruptical.harvesterhoes.listeners.HarvesterUpgradeListener;
 import com.coruptical.harvesterhoes.models.Enchant;
 import com.coruptical.harvesterhoes.models.Keys;
 import me.realized.tokenmanager.api.TokenManager;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 // TODO: Create auto-sell enchantment (Sells every 64 cane)
@@ -25,6 +27,8 @@ public final class HarvesterHoes extends JavaPlugin {
     private NamespacedKey hoe_key;
 
     private GUIManager guiManager;
+
+    private Economy economy = null;
 
     private String[] keys;
 
@@ -62,6 +66,10 @@ public final class HarvesterHoes extends JavaPlugin {
         return rollSpawners;
     }
 
+    public Economy getEconomy() {
+        return economy;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -76,7 +84,26 @@ public final class HarvesterHoes extends JavaPlugin {
         register();
 
         setupEnchants();
+
+        if (!setupEconomy()){
+            getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+        }
+
     }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return true;
+    }
+
 
     public void doChecks(){
         int tokenMasterMaxLevel = getTokenMasterMaxLevel();
@@ -135,9 +162,10 @@ public final class HarvesterHoes extends JavaPlugin {
 
 
         // Auto sell
+        Enchant autoSell = Enchant.AUTOSELL;
+        autoSell.hoeEnchant.setStartingPrice(getAutoSellPrice());
 
-
-        // Quake
+        // TODO: Implement quake, after discussing behaviour.
 
 
 
@@ -242,5 +270,17 @@ public final class HarvesterHoes extends JavaPlugin {
 
     public String getSpawnerStringList(){
         return getConfig().getString("SpawnerList");
+    }
+
+    public int getAutoSellPrice(){
+        return getConfig().getInt("AutoSellPrice");
+    }
+
+    public int getCanePrice(){
+        return getConfig().getInt("SugarCaneSellPrice");
+    }
+
+    public String getPrefix(){
+        return getConfig().getString("PluginPrefix");
     }
 }

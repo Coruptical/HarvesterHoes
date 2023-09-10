@@ -29,6 +29,15 @@ public enum Enchant {
             0,
             0,
             0
+    )),
+    AUTOSELL(new HoeEnchant(
+            Utils.cmsg("&bAuto Sell"),
+            Utils.cmsg("&7Automatically sells sugar cane for you once you acquire enough."),
+            1,
+            Material.PAPER,
+            0,
+            0,
+            0
     ))
     ;
 

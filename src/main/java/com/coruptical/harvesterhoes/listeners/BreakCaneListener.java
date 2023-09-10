@@ -3,6 +3,7 @@ package com.coruptical.harvesterhoes.listeners;
 import com.coruptical.harvesterhoes.HarvesterHoes;
 import com.coruptical.harvesterhoes.models.Enchant;
 import com.coruptical.harvesterhoes.utils.Utils;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,13 +53,18 @@ public class BreakCaneListener implements Listener {
                 Enchant.KEYFINDER.hoeEnchant.getKeyName());
         NamespacedKey spawnerFinderKey = new NamespacedKey(plugin,
                 Enchant.SPAWNERFINDER.hoeEnchant.getKeyName());
+        NamespacedKey autoSellKey = new NamespacedKey(plugin,
+                Enchant.AUTOSELL.hoeEnchant.getKeyName());
         int levelTokenMaster = container.get(tokenMasterKey, PersistentDataType.INTEGER);
         int levelSpawnerFinder = container.get(spawnerFinderKey, PersistentDataType.INTEGER);
         int levelKeyFinder = container.get(keyFinderKey, PersistentDataType.INTEGER);
+        int levelAutoSell = container.get(autoSellKey, PersistentDataType.INTEGER);
 
         double tokenMasterMultipler = 1;
         double keyFinderChanceDecimal = 0;
         double spawnerFinderChanceDecimal = 0;
+
+        int canePrice = plugin.getCanePrice();
 
 
         if(levelTokenMaster > 0){
@@ -93,6 +98,30 @@ public class BreakCaneListener implements Listener {
 
 
         Random random = new Random();
+
+        // Implement auto-sell.
+
+        if (levelAutoSell > 0){
+            if (p.getInventory().containsAtLeast(new ItemStack(Material.SUGAR_CANE), 64)){
+                p.getInventory().remove(new ItemStack(Material.SUGAR_CANE,
+                        64));
+
+                int sellPrice = 64*canePrice;
+
+                // Eco give with Vault API
+                EconomyResponse response = plugin.getEconomy().depositPlayer(p,
+                        sellPrice);
+                if (response.transactionSuccess()){
+                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
+                            "&aSold 64 sugar cane for &f$" + sellPrice));
+                }else {
+                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
+                            "&cAn error occurred: %s"), response.errorMessage);
+                }
+            }
+        }
+
+
 
         // Implement key finder and spawner finder
 
@@ -139,9 +168,9 @@ public class BreakCaneListener implements Listener {
 
                         p.getInventory().addItem(stack);
                         p.sendMessage(Utils.cmsg(
-                                "&6You got &f" + spawnerName.replace(
+                                 plugin.getPrefix()+"&aYou got &f" + spawnerName.replace(
                                         "_"," ").toUpperCase()
-                                + " &6SPAWNER."
+                                + " &aSPAWNER."
                         ));
                         break;
                     }

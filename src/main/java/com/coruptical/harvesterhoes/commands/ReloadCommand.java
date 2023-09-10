@@ -17,7 +17,7 @@ public class ReloadCommand implements CommandExecutor {
 
         reloadConfig();
 
-        commandSender.sendMessage(Utils.cmsg("&7[&aHarvester Hoes&7] &aSuccessfully reloaded."));
+        commandSender.sendMessage(Utils.cmsg( plugin.getPrefix()+"&aSuccessfully reloaded."));
 
         return true;
     }
