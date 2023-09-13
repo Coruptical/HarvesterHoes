@@ -37,6 +37,30 @@ public class BreakCaneListener implements Listener {
         }
     }
 
+    private void processAutoSell(Player p, int levelAutoSell){
+        int canePrice = plugin.getCanePrice();
+
+        if (levelAutoSell > 0){
+            if (p.getInventory().containsAtLeast(new ItemStack(Material.SUGAR_CANE), 64)){
+                p.getInventory().remove(new ItemStack(Material.SUGAR_CANE,
+                        64));
+
+                int sellPrice = 64*canePrice;
+
+                // Eco give with Vault API
+                EconomyResponse response = plugin.getEconomy().depositPlayer(p,
+                        sellPrice);
+                if (response.transactionSuccess()){
+                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
+                            "&aSold 64 sugar cane for &f$" + sellPrice));
+                }else {
+                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
+                            "&cAn error occurred: %s"), response.errorMessage);
+                }
+            }
+        }
+    }
+
     public void processStack(Block topBlock, Player p, PersistentDataContainer container){
         Block selectedBlock = topBlock.getRelative(0, -1, 0);
         int caneBroke = 0;
@@ -64,7 +88,6 @@ public class BreakCaneListener implements Listener {
         double keyFinderChanceDecimal = 0;
         double spawnerFinderChanceDecimal = 0;
 
-        int canePrice = plugin.getCanePrice();
 
 
         if(levelTokenMaster > 0){
@@ -101,27 +124,7 @@ public class BreakCaneListener implements Listener {
 
         // Implement auto-sell.
 
-        if (levelAutoSell > 0){
-            if (p.getInventory().containsAtLeast(new ItemStack(Material.SUGAR_CANE), 64)){
-                p.getInventory().remove(new ItemStack(Material.SUGAR_CANE,
-                        64));
-
-                int sellPrice = 64*canePrice;
-
-                // Eco give with Vault API
-                EconomyResponse response = plugin.getEconomy().depositPlayer(p,
-                        sellPrice);
-                if (response.transactionSuccess()){
-                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
-                            "&aSold 64 sugar cane for &f$" + sellPrice));
-                }else {
-                    p.sendMessage(Utils.cmsg(plugin.getPrefix()+
-                            "&cAn error occurred: %s"), response.errorMessage);
-                }
-            }
-        }
-
-
+        processAutoSell(p, levelAutoSell);
 
         // Implement key finder and spawner finder
 
@@ -191,7 +194,7 @@ public class BreakCaneListener implements Listener {
         Player p = e.getPlayer();
         if(p.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE)){
 
-            // check if is harvester hoe
+            // check if harvester hoe
 
             ItemStack stack = p.getInventory().getItemInMainHand();
             ItemMeta meta = stack.getItemMeta();
