@@ -55,7 +55,7 @@ public class BreakCaneListener implements Listener {
                             "&aSold 64 sugar cane for &f$" + sellPrice));
                 }else {
                     p.sendMessage(Utils.cmsg(plugin.getPrefix()+
-                            "&cAn error occurred: %s"), response.errorMessage);
+                            "&cA transaction error occurred: %s"), response.errorMessage);
                 }
             }
         }
@@ -187,12 +187,11 @@ public class BreakCaneListener implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent e){
 
-
         Block brokenBlock = e.getBlock();
         if (!brokenBlock.getType().equals(Material.SUGAR_CANE)) return;
 
         Player p = e.getPlayer();
-        if(p.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE)){
+        if(p.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_HOE)) {
 
             // check if harvester hoe
 
